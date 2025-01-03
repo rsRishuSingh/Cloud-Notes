@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 });
 
 // Handle POST request for user registration
-router.post('/createAccount', [
+router.post('/createaccount', [
     // Validation for 'name': must be at least 3 characters long
     body('name', 'Name must have more than 3 character').isLength({ min: 3 }),
     // Validation for 'email': must be a valid email address
@@ -103,7 +103,7 @@ router.post('/login', [
     }
 })
 
-router.post('/getUser', fetchUser, async (req, res) => {
+router.post('/getuser', fetchUser, async (req, res) => {
     try {
         let userId = req.user.id
         let user = await User.findById(userId).select("-password")
