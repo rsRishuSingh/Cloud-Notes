@@ -4,6 +4,7 @@ import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
+import fetchUser from '../middleware/fetchUser.js';
 
 dotenv.config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -18,7 +19,7 @@ router.get('/', (req, res) => {
 });
 
 // Handle POST request for user registration
-router.post('/', [
+router.post('/createAccount', [
     // Validation for 'name': must be at least 3 characters long
     body('name', 'Name must have more than 3 character').isLength({ min: 3 }),
     // Validation for 'email': must be a valid email address
@@ -66,6 +67,54 @@ router.post('/', [
         return res.status(400).json({ error: "some error occured" });
     }
 });
+
+router.post('/login', [
+    body('email').isEmail(),
+    body('password').exists()
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ error: errors.array() })
+        }
+        // Check if a user with the given email already exists in the database
+        let { email, password } = req.body;
+        let user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(400).json({ error: "No user exist" })
+        }
+        const comparePassword = await bcrypt.compare(password, user.password)
+        if (!comparePassword) {
+            return res.status(400).json({ error: "incorrect password" });
+        }
+        let data = {
+            user:
+                { id: user.id }
+        }
+        const authToken = jwt.sign(data, JWT_SECRET_KEY)
+        res.json({ authToken });
+    }
+    catch (err) {
+        // Log any server-side errors for debugging
+        console.log(err);
+
+        // Return a 400 response with a generic error message
+        return res.status(400).json({ error: "some error occured" });
+    }
+})
+
+router.post('/getUser', fetchUser, async (req, res) => {
+    try {
+        let userId = req.user.id
+        let user = await User.findById(userId).select("-password")
+        res.json(user)
+
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(400).json({ error: "some error occured" });
+    }
+})
 
 // Export the router so it can be used in other files
 export default router;

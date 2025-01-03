@@ -5,19 +5,18 @@
 
 import { connectToDB } from './db.js'
 import express from "express"
-import login from './routes/login.js'
+import auth from './routes/auth.js'
 import notes from './routes/notes.js'
 import dotenv from 'dotenv';
 
 const PORT = 5000;
 dotenv.config();
-console.log(process.env.JWT_SECRET_KEY)
 const app = express();
 
 app.use(express.json())
 connectToDB()
 
-app.use('/api/auth', login)
+app.use('/api/auth', auth)
 app.use('/api/notes', notes)
 
 app.get('/', (req, res) => {

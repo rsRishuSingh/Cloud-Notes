@@ -1,5 +1,11 @@
+import mongoose from "mongoose";
+
 // import { Schema } from "mongoose
 const notesSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     title: {
         type: String,
         required: true,
@@ -18,4 +24,5 @@ const notesSchema = new mongoose.Schema({
     }
 });
 
-export const notes = mongoose.model('notes', notesSchema);
+const notes = mongoose.model('notes', notesSchema);
+export default notes;
