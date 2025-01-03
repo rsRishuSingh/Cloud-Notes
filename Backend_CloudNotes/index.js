@@ -7,10 +7,13 @@ import { connectToDB } from './db.js'
 import express from "express"
 import login from './routes/login.js'
 import notes from './routes/notes.js'
+import dotenv from 'dotenv';
 
-const PORT = 3000;
-
+const PORT = 5000;
+dotenv.config();
+console.log(process.env.JWT_SECRET_KEY)
 const app = express();
+
 app.use(express.json())
 connectToDB()
 
