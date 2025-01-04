@@ -59,6 +59,7 @@ router.post('/createaccount', [
         }
         const authToken = jwt.sign(data, JWT_SECRET_KEY)
         res.json({ authToken });
+        // res.send(JWT_SECRET_KEY)
     } catch (err) {
         // Log any server-side errors for debugging
         console.log(err);

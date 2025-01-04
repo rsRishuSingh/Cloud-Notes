@@ -21,6 +21,7 @@ app.use('/api/notes', notes)
 
 app.get('/', (req, res) => {
     console.log(req.body)
+    console.log(process.env.JWT_SECRET_KEY)
     res.send("GET Hello World")
 
 }).post('/', (req, res) => {
