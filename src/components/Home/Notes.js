@@ -8,11 +8,11 @@ export default function Notes() {
   return (
     <div className='mt-3'>
       <h3>Notes</h3>
-      <div className="d-flex justify-content-center  justify-content-md-start flex-wrap">
+      <div className="d-flex justify-content-center flex-wrap">
         {
           notes.map((note) => {
             return (
-              <Noteitem key={note._id} title={note.title} description={note.description} />
+              <Noteitem key={note._id} title={note.title} description={note.description} _id={note._id} />
             )
           })
         }
