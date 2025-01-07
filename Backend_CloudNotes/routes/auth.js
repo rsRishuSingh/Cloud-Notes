@@ -28,20 +28,22 @@ router.post('/createaccount', [
     body('password', 'password length must be more than 5').isLength({ min: 5 })
 ], async (req, res) => {
     console.log("POST ", req.body); // Log the incoming request body
-
+    const status = true;
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        status = false
         // If errors exist, return a 400 response with the error details
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ "status": status, errors: errors.array() });
     }
 
     try {
         // Check if a user with the given email already exists in the database
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            // If user exists, return a 400 response with an error message
-            return res.status(400).json({ error: "email already exist" });
+            status = false
+            // If errors exist, return a 400 response with the error details
+            return res.status(400).json({ "status": status, errors: errors.array() });
         }
         let salt = await bcrypt.genSalt(10)
         let secPassword = await bcrypt.hash(req.body.password, salt)
@@ -58,14 +60,14 @@ router.post('/createaccount', [
                 { id: user.id }
         }
         const authToken = jwt.sign(data, JWT_SECRET_KEY)
-        res.json({ authToken });
+        res.json({ "status": status, authToken });
         // res.send(JWT_SECRET_KEY)
     } catch (err) {
         // Log any server-side errors for debugging
         console.log(err);
-
+        status = false
         // Return a 400 response with a generic error message
-        return res.status(400).json({ error: "some error occured" });
+        return res.status(400).json({ "status": status, error: "some error occured" });
     }
 });
 
@@ -74,26 +76,31 @@ router.post('/login', [
     body('password').exists()
 ], async (req, res) => {
     try {
+        const status = true;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ error: errors.array() })
+            status = false
+            // If errors exist, return a 400 response with the error details
+            return res.status(400).json({ "status": status, errors: errors.array() });
         }
         // Check if a user with the given email already exists in the database
         let { email, password } = req.body;
         let user = await User.findOne({ email: email });
         if (!user) {
-            return res.status(400).json({ error: "No user exist" })
+            status = false
+            return res.status(400).json({ "status": status, error: "No user exist" })
         }
         const comparePassword = await bcrypt.compare(password, user.password)
         if (!comparePassword) {
-            return res.status(400).json({ error: "incorrect password" });
+            status = false
+            return res.status(400).json({ "status": status, error: "incorrect password" });
         }
         let data = {
             user:
                 { id: user.id }
         }
         const authToken = jwt.sign(data, JWT_SECRET_KEY)
-        res.json({ authToken });
+        res.json({ "status": status, authToken });
     }
     catch (err) {
         // Log any server-side errors for debugging

@@ -5,6 +5,7 @@ import Notes from './Home/Notes'
 export default function Home() {
   return (
     <div className='container'>
+
       <Addnote />
       <Notes />
     </div>

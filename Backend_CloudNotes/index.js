@@ -8,10 +8,12 @@ import express from "express"
 import auth from './routes/auth.js'
 import notes from './routes/notes.js'
 import dotenv from 'dotenv';
+import cors from 'cors'
 
 const PORT = 5000;
 dotenv.config();
 const app = express();
+app.use(cors())
 
 app.use(express.json())
 connectToDB()

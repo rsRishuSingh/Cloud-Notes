@@ -17,7 +17,7 @@ router.get('/fetchnotes', fetchUser, async (req, res) => {
 router.post('/addnote', fetchUser, [
     body('title', 'title must be present').isLength({ min: 1 }),
     body('description', 'Enter description').optional(),
-    body('tags', 'Enter tags').isArray().optional()
+    body('tags', 'Enter tags').optional()
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -33,9 +33,9 @@ router.post('/addnote', fetchUser, [
 
 router.put('/updatenote/:id', fetchUser,
     [
-        body('title', 'title must be present').isLength({ min: 1 }),
-        body('description', 'Enter description').optional(),
-        body('tags', 'Enter tags').optional()
+        body('title', 'title must be present').isLength({ min: 3 }),
+        body('description', 'Enter description').isLength({ min: 1 }),
+        // body('tags', 'Enter tags').optional()
     ], async (req, res) => {
         try {
             const errors = validationResult(req);

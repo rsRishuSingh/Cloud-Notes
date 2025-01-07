@@ -16,7 +16,8 @@ const notesSchema = new mongoose.Schema({
     },
     tags: {
         type: String,
-        default: "General"
+        default: "General",
+        set: (value) => (value === "" ? "General" : value)
     },
     date: {
         type: Date,
