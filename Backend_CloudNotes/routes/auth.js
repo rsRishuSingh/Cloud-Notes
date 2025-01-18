@@ -27,8 +27,8 @@ router.post('/createaccount', [
     // Validation for 'password': must be at least 5 characters long
     body('password', 'password length must be more than 5').isLength({ min: 5 })
 ], async (req, res) => {
-    console.log("POST ", req.body); // Log the incoming request body
-    const status = true;
+    // console.log("POST ", req.body); // Log the incoming request body
+    let status = true;
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,7 +43,7 @@ router.post('/createaccount', [
         if (user) {
             status = false
             // If errors exist, return a 400 response with the error details
-            return res.status(400).json({ "status": status, errors: errors.array() });
+            return res.status(400).json({ "status": status, errors: { "msg": "email already registered", "path": "Email" } });
         }
         let salt = await bcrypt.genSalt(10)
         let secPassword = await bcrypt.hash(req.body.password, salt)
@@ -64,10 +64,9 @@ router.post('/createaccount', [
         // res.send(JWT_SECRET_KEY)
     } catch (err) {
         // Log any server-side errors for debugging
-        console.log(err);
         status = false
         // Return a 400 response with a generic error message
-        return res.status(400).json({ "status": status, error: "some error occured" });
+        return res.status(400).json({ "status": status, errors: { "msg": "internal server error", "path": "Server error" } });
     }
 });
 
@@ -75,8 +74,8 @@ router.post('/login', [
     body('email').isEmail(),
     body('password').exists()
 ], async (req, res) => {
+    let status = true;
     try {
-        const status = true;
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             status = false
@@ -88,12 +87,12 @@ router.post('/login', [
         let user = await User.findOne({ email: email });
         if (!user) {
             status = false
-            return res.status(400).json({ "status": status, error: "No user exist" })
+            return res.status(400).json({ "status": status, errors: { "msg": "no user found", "path": "Email" } });
         }
         const comparePassword = await bcrypt.compare(password, user.password)
         if (!comparePassword) {
             status = false
-            return res.status(400).json({ "status": status, error: "incorrect password" });
+            return res.status(400).json({ "status": status, errors: { "msg": "incorrect password", "path": "Password" } });
         }
         let data = {
             user:
@@ -106,8 +105,7 @@ router.post('/login', [
         // Log any server-side errors for debugging
         console.log(err);
 
-        // Return a 400 response with a generic error message
-        return res.status(400).json({ error: "some error occured" });
+        return res.status(400).json({ "status": status, errors: { "msg": "internal server error", "path": "Server error" } });
     }
 })
 
@@ -120,7 +118,7 @@ router.post('/getuser', fetchUser, async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        return res.status(400).json({ error: "some error occured" });
+        return res.status(400).json({ "status": status, errors: { "msg": "internal server error", "path": "Server error" } });
     }
 })
 

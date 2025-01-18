@@ -21,12 +21,12 @@ function Login() {
             <form onSubmit={onSubmit}>
                 <div className="mb-3">
                     <label htmlFor="emailLog" className="form-label">Email address</label>
-                    <input type="email" className="form-control" id="emailLog" aria-describedby="emailHelp" value={credentials.email} onChange={handleOnChange} name="email" autoComplete="current-email" />
+                    <input type="email" className="form-control" id="emailLog" aria-describedby="emailHelp" value={credentials.email} onChange={handleOnChange} name="email" autoComplete="current-email" required />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="passwordLog" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="passwordLog" value={credentials.password} onChange={handleOnChange} name="password" autoComplete="current-password" />
+                    <input type="password" className="form-control" id="passwordLog" value={credentials.password} onChange={handleOnChange} name="password" autoComplete="current-password" required />
                 </div>
                 <button type="submit" className="btn btn-primary">Login</button>
             </form>

@@ -9,6 +9,7 @@ import NoteState from './context/notes/NoteState';
 import Alert from './components/Alert';
 // import NoteState from './context/notes/NoteState';
 function App() {
+  
   return (
 
     <BrowserRouter>

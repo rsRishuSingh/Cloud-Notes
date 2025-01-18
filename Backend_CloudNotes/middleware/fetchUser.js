@@ -5,7 +5,7 @@ dotenv.config()
 const fetchUser = async (req, res, next) => {
     const authToken = req.header('auth-token');
     if (!authToken) {
-        return res.status(401).send('authorization token not found')
+        return res.status(401).json({ errors: { "message": 'Token not found', "path":"Authorization "}})
     }
     try {
 
