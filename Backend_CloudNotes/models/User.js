@@ -1,31 +1,3 @@
-// import mongoose from "mongoose";
-
-// const userSchema = new mongoose.Schema({
-//     name: {
-//         type: String,
-//         required: true,
-//     },
-//     email: {
-//         type: String,
-//         required: true,
-//         unique: true
-//     },
-//     password: {
-//         type: String,
-//         required: true,
-//     },
-//     date: {
-//         type: Date,
-//         default: Date.now,
-//     }
-// });
-
-// const user = mongoose.model('user', userSchema);
-// // user.createIndexes()
-// export default user;
-
-
-
 
 import mongoose from "mongoose"; // Import mongoose for MongoDB object modeling
 
