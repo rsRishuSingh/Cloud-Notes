@@ -1,28 +1,60 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-// import { Schema } from "mongoose
+// // import { Schema } from "mongoose
+// const notesSchema = new mongoose.Schema({
+//     user: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'user'
+//     },
+//     title: {
+//         type: String,
+//         required: true,
+//     },
+//     description: {
+//         type: String,
+//     },
+//     tags: {
+//         type: String,
+//         default: "General",
+//         set: (value) => (value === "" ? "General" : value)
+//     },
+//     date: {
+//         type: Date,
+//         default: Date.now,
+//     }
+// });
+
+// const notes = mongoose.model('notes', notesSchema);
+// export default notes;
+
+
+import mongoose from "mongoose"; // Import mongoose for MongoDB object modeling
+
+// Define the schema for notes
 const notesSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        type: mongoose.Schema.Types.ObjectId, // Link to the user model
+        ref: 'user' // Reference to the 'user' collection
     },
     title: {
-        type: String,
-        required: true,
+        type: String, // Title of the note
+        required: true, // Title is mandatory
     },
     description: {
-        type: String,
+        type: String, // Description of the note
     },
     tags: {
-        type: String,
-        default: "General",
-        set: (value) => (value === "" ? "General" : value)
+        type: String, // Tags for categorizing the note
+        default: "General", // Default tag if none is provided
+        set: (value) => (value === "" ? "General" : value) // Ensure default value for empty strings
     },
     date: {
-        type: Date,
-        default: Date.now,
+        type: Date, // Date when the note was created
+        default: Date.now, // Automatically set the current date and time
     }
 });
 
+// Create a model for the notes schema
 const notes = mongoose.model('notes', notesSchema);
-export default notes;
+
+export default notes; // Export the notes model

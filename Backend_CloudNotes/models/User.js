@@ -1,25 +1,57 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
+// const userSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true,
+//     },
+//     email: {
+//         type: String,
+//         required: true,
+//         unique: true
+//     },
+//     password: {
+//         type: String,
+//         required: true,
+//     },
+//     date: {
+//         type: Date,
+//         default: Date.now,
+//     }
+// });
+
+// const user = mongoose.model('user', userSchema);
+// // user.createIndexes()
+// export default user;
+
+
+
+
+import mongoose from "mongoose"; // Import mongoose for MongoDB object modeling
+
+// Define the schema for user
 const userSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true,
+        type: String, // Name of the user
+        required: true, // Name is mandatory
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+        type: String, // Email of the user
+        required: true, // Email is mandatory
+        unique: true // Ensures no duplicate emails
     },
     password: {
-        type: String,
-        required: true,
+        type: String, // Hashed password of the user
+        required: true, // Password is mandatory
     },
     date: {
-        type: Date,
-        default: Date.now,
+        type: Date, // Date when the user was created
+        default: Date.now, // Automatically set the current date and time
     }
 });
 
+// Create a model for the user schema
 const user = mongoose.model('user', userSchema);
-// user.createIndexes()
+// // user.createIndexes()
+// Export the user model
 export default user;
