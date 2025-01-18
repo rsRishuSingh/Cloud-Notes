@@ -110,14 +110,17 @@ router.post('/login', [
 })
 
 router.post('/getuser', fetchUser, async (req, res) => {
+    let status = true;
     try {
         let userId = req.user.id
         let user = await User.findById(userId).select("-password")
-        res.json(user)
+        let userDetails = { "name": user.name, "email": user.email }
+        res.json({ "status": status, userDetails });
 
     }
     catch (err) {
         console.log(err);
+        status = false
         return res.status(400).json({ "status": status, errors: { "msg": "internal server error", "path": "Server error" } });
     }
 })

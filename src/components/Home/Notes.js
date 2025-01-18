@@ -4,13 +4,13 @@ import noteContext from '../../context/notes/noteContext'
 import Modal from '../Modal'
 
 export default function Notes() {
+  const context = useContext(noteContext)
+  const { notes, fetchNotes, editNote } = context
   useEffect(() => {
     fetchNotes()
     console.log("called")
     // eslint-disable-next-line
   }, [])
-  const context = useContext(noteContext)
-  const { notes, fetchNotes, editNote } = context
 
   const ref = useRef(null)
   const [note, setNote] = useState({

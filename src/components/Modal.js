@@ -20,7 +20,7 @@ export default function Modal(props) {
                         <div className="modal-body">
                             <div>
                                 <label htmlFor="etitle" className="form-label">Enter Title</label>
-                                <input type="text" className="form-control" id="etitle" name="title" placeholder="Add title" onChange={handleChangeModal} value={note.title} />
+                                <input type="text" className="form-control" id="etitle" name="title" placeholder="Add title" onChange={handleChangeModal} value={note.title} minLength={3} />
                             </div>
                             <div >
                                 <label htmlFor="edescription" className="form-label">Enter description</label>

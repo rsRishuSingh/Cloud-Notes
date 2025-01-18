@@ -4,10 +4,28 @@ import noteContext from '../../context/notes/noteContext'
 export default function Noteitem(props) {
     const context = useContext(noteContext)
     const { deleteNote } = context
+    function formatToIndianDateTime(isoDate) {
+        // Parse the ISO date string into a Date object
+        const date = new Date(isoDate);
+
+        // Convert to Indian Standard Time (IST)
+        const options = { timeZone: 'Asia/Kolkata', hour12: false };
+        const indianDate = date.toLocaleString('en-IN', options);
+
+        // Extract date and time components
+        const [day, month, year] = indianDate.split(",")[0].split("/");
+        const time = indianDate.split(",")[1].trim();
+
+        // Format the date and time
+        const formattedDate = `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
+        const formattedDateTime = ` ${time} ${formattedDate}`;
+
+        return formattedDateTime;
+    }
     return (
         <div className="card bg-yellow-200 m-2" style={{ width: "18rem" }} >
             <div className="card-body">
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between m-0">
 
                     <h5 className="card-title">{props.note.title}</h5>
 
@@ -22,6 +40,9 @@ export default function Noteitem(props) {
                 </div>
                 <p className="card-text">{props.note.description}</p>
                 <p className="card-text">{props.note.tags}</p>
+                <div className=" justify-content-end d-flex m-0">
+                    <p className="card-text m-0">{formatToIndianDateTime(props.note.date)}</p>
+                </div>
             </div>
 
 

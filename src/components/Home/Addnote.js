@@ -27,7 +27,7 @@ export default function Addnote() {
             <h2>Add Note</h2>
             <div className='mb-2'>
                 <label htmlFor="title" className="form-label">Enter Title</label>
-                <input type="text" className="form-control" onChange={onChange} id="title" name="title" placeholder="Add title" value={note.title} />
+                <input type="text" className="form-control" onChange={onChange} id="title" name="title" placeholder="Add title" value={note.title} minLength={3} />
             </div>
             <div >
                 <label htmlFor="description" className="form-label">Enter description</label>

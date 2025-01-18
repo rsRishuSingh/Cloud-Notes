@@ -22,7 +22,7 @@ router.get('/fetchnotes', fetchUser, async (req, res) => {
 })
 
 router.post('/addnote', fetchUser, [
-    body('title', 'title must be present').isLength({ min: 1 }),
+    body('title', 'title must be more than 3 character').isLength({ min: 3 }),
     body('description', 'Enter description').optional(),
     body('tags', 'Enter tags').optional()
 ], async (req, res) => {
@@ -32,7 +32,7 @@ router.post('/addnote', fetchUser, [
         if (!errors.isEmpty()) {
             // If errors exist, return a 400 response with the error details
             status = false;
-            return res.status(400).json({ "status": status, errors: errors.array() });
+            return res.status(400).json({ "status": status, errors: { "msg": errors.array()[0].msg, "path": errors.array()[0].path } });
         }
 
         let { title, description, tags } = req.body
@@ -50,8 +50,8 @@ router.post('/addnote', fetchUser, [
 
 router.put('/updatenote/:id', fetchUser,
     [
-        body('title', 'title must be present').isLength({ min: 3 }),
-        body('description', 'Enter description').isLength({ min: 1 }),
+        body('title', 'title must be more than 3 characters').isLength({ min: 3 }),
+        body('description', 'Enter description').optional(),
         // body('tags', 'Enter tags').optional()
     ], async (req, res) => {
         let status = true
@@ -60,8 +60,7 @@ router.put('/updatenote/:id', fetchUser,
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 status = false
-                // If errors exist, return a 400 response with the error details
-                return res.status(400).json({ "status": status, errors: errors.array() });
+                return res.status(400).json({ "status": status, errors: { "msg": errors.array()[0].msg, "path": errors.array()[0].path } });
 
             }
 

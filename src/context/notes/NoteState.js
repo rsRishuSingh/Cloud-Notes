@@ -60,19 +60,49 @@ const NoteState = (props) => {
         }
     }
 
+    const getUser = async () => {
+
+        try {
+            let response = await fetch(`${baseURL}/api/auth/getuser`, {
+                method: 'POST', // HTTP method
+                headers: {
+                    'auth-token': localStorage.getItem('auth-token')
+                }
+            })
+            let data = await response.json();
+
+            // console.log(data.userDetails)
+            if (data.status) {
+                showAlert('Success', "account details fetched")
+            }
+            else {
+                showAlert(data.errors.path, data.errors.msg)
+
+            }
+            return data.userDetails;
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
     const showAlert = (type, message) => {
         setAlert({ "message": message, "type": type })
         setTimeout(() => {
             setAlert(null)
         }, 1500)
     }
+    const checkToken = () => !!localStorage.getItem('auth-token');
 
     const fetchNotes = async () => {
         try {
+            if (!checkToken()) {
+                navigate('/login');
+                return;
+            }
             let response = await fetch(`${baseURL}/api/notes/fetchnotes`, {
                 method: 'GET', // HTTP method
                 headers: {
-                    'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc3N2FhZDcxMTc0OGZkMTc5ODk3YmU3In0sImlhdCI6MTczNTkwMDQ2OH0.D9LzgGd6d-yWZZYAmxmAwqTVOf7IBw49J7DKAVXmewk'
+                    'auth-token': localStorage.getItem('auth-token')
                 }
             })
             let data = await response.json();
@@ -92,11 +122,15 @@ const NoteState = (props) => {
 
     const addNote = async (title, description, tags) => {
         try {
+            if (!checkToken()) {
+                navigate('/login');
+                return;
+            }
             let response = await fetch(`${baseURL}/api/notes/addnote`, {
                 method: 'POST', // HTTP method
                 headers: {
                     'Content-Type': 'application/json',
-                    'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc3N2FhZDcxMTc0OGZkMTc5ODk3YmU3In0sImlhdCI6MTczNTkwMDQ2OH0.D9LzgGd6d-yWZZYAmxmAwqTVOf7IBw49J7DKAVXmewk'
+                    'auth-token': localStorage.getItem('auth-token')
                 },
                 body: JSON.stringify({ "title": title, "description": description, "tags": tags })
             })
@@ -116,11 +150,15 @@ const NoteState = (props) => {
     }
     const editNote = async (note) => {
         try {
+            if (!checkToken()) {
+                navigate('/login');
+                return;
+            }
             let response = await fetch(`${baseURL}/api/notes/updatenote/${note._id}`, {
                 method: 'PUT', // HTTP method
                 headers: {
                     'Content-Type': 'application/json',
-                    'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc3N2FhZDcxMTc0OGZkMTc5ODk3YmU3In0sImlhdCI6MTczNTkwMDQ2OH0.D9LzgGd6d-yWZZYAmxmAwqTVOf7IBw49J7DKAVXmewk'
+                    'auth-token': localStorage.getItem('auth-token')
                 },
                 body: JSON.stringify({ "title": note.title, "description": note.description, "tags": note.tags })
             })
@@ -152,13 +190,17 @@ const NoteState = (props) => {
     }
     const deleteNote = async (id) => {
         try {
+            if (!checkToken()) {
+                navigate('/login');
+                return;
+            }
             const newNote = notes.filter((note) => {
                 return note._id !== id
             })
             let response = await fetch(`${baseURL}/api/notes/deletenote/${id}`, {
                 method: 'DELETE', // HTTP method
                 headers: {
-                    'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjc3N2FhZDcxMTc0OGZkMTc5ODk3YmU3In0sImlhdCI6MTczNTkwMDQ2OH0.D9LzgGd6d-yWZZYAmxmAwqTVOf7IBw49J7DKAVXmewk'
+                    'auth-token': localStorage.getItem('auth-token')
                 }
             })
             let data = await response.json()
@@ -179,7 +221,7 @@ const NoteState = (props) => {
     }
     return (
 
-        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, fetchNotes, loginToAccount, createAccount, showAlert, alert }}>
+        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, fetchNotes, loginToAccount, createAccount, showAlert, alert, getUser, checkToken}}>
             {props.children}
         </NoteContext.Provider>
 

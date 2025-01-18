@@ -3,9 +3,11 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const fetchUser = async (req, res, next) => {
+    let status = true
     const authToken = req.header('auth-token');
     if (!authToken) {
-        return res.status(401).json({ errors: { "message": 'Token not found', "path":"Authorization "}})
+        status = false
+        return res.status(401).json({ "status": status, errors: { "msg": "no token exits", "path": "null token" } })
     }
     try {
 
@@ -17,7 +19,7 @@ const fetchUser = async (req, res, next) => {
         next();
     }
     catch (err) {
-        res.status(401).send('invalid authorization token')
+        res.status(401).json({ "status": status, errors: { "msg": "token verification failed", "path": "verification" } })
     }
 }
 export default fetchUser;
