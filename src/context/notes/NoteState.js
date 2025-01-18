@@ -4,35 +4,19 @@ import NoteContext from './noteContext'
 import { useNavigate } from "react-router-dom";
 
 const NoteState = (props) => {
-    let baseURL = 'http://localhost:5000';
+    let baseURL = 'https://backend-cloudnotes.onrender.com';
     const [notes, setNotes] = useState([])
     const [alert, setAlert] = useState(null)
     let navigate = useNavigate()
 
-    const loginToAccount = async ({ email, password }) => {
-
-        try {
-            let response = await fetch(`${baseURL}/api/auth/login`, {
-                method: 'POST', // HTTP method
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ "email": email, "password": password })
-            })
-            let data = await response.json();
-            if (data.status) {
-                localStorage.setItem('auth-token', data.authToken)
-                showAlert('Success', "login sucessfull")
-                navigate("/")
-            }
-            else {
-                showAlert(data.errors.path, data.errors.msg)
-            }
-        }
-        catch (err) {
-            console.log(err)
-        }
+    const showAlert = (type, message) => {
+        setAlert({ "message": message, "type": type })
+        setTimeout(() => {
+            setAlert(null)
+        }, 1500)
     }
+    const checkToken = () => !!localStorage.getItem('auth-token');
+
     const createAccount = async ({ name, email, password }) => {
 
         try {
@@ -53,6 +37,30 @@ const NoteState = (props) => {
             else {
                 showAlert(data.errors.path, data.errors.msg)
 
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+    const loginToAccount = async ({ email, password }) => {
+
+        try {
+            let response = await fetch(`${baseURL}/api/auth/login`, {
+                method: 'POST', // HTTP method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "email": email, "password": password })
+            })
+            let data = await response.json();
+            if (data.status) {
+                localStorage.setItem('auth-token', data.authToken)
+                showAlert('Success', "login sucessfull")
+                navigate("/")
+            }
+            else {
+                showAlert(data.errors.path, data.errors.msg)
             }
         }
         catch (err) {
@@ -85,13 +93,6 @@ const NoteState = (props) => {
             console.log(err)
         }
     }
-    const showAlert = (type, message) => {
-        setAlert({ "message": message, "type": type })
-        setTimeout(() => {
-            setAlert(null)
-        }, 1500)
-    }
-    const checkToken = () => !!localStorage.getItem('auth-token');
 
     const fetchNotes = async () => {
         try {
@@ -221,7 +222,7 @@ const NoteState = (props) => {
     }
     return (
 
-        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, fetchNotes, loginToAccount, createAccount, showAlert, alert, getUser, checkToken}}>
+        <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, editNote, fetchNotes, loginToAccount, createAccount, showAlert, alert, getUser, checkToken }}>
             {props.children}
         </NoteContext.Provider>
 

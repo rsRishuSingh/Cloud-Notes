@@ -1,12 +1,18 @@
 import React from 'react'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 export default function Navbar() {
 
     let location = useLocation();
-
+    let navigate = useNavigate()
+    const handleLogout = () => {
+        console.log('Logging out...');
+        localStorage.removeItem('auth-token');
+        navigate('/login');
+    }
     // useEffect(() => {
     //     console.log(location)
     // }, [location])
+
 
     return (
         <nav className="navbar navbar-expand-lg bg-warning sticky-top">
@@ -35,11 +41,16 @@ export default function Navbar() {
                             </ul>
                         </li>
                     </ul>
-                    <div>
+                    {!localStorage.getItem('auth-token') ? <div>
 
                         <Link className="btn btn-outline-primary fw-bold rounded-pill mx-1" to="/login" role="button">Login</Link>
                         <Link className="btn btn-outline-primary fw-bold rounded-pill mx-1" to="/Signup" role="button">SignUp</Link>
-                    </div>
+                    </div> :
+                        <div>
+
+                            <Link className="btn btn-outline-primary fw-bold rounded-pill mx-1" role="button" onClick={handleLogout} to="/login">Logout</Link>
+                        </div>
+                    }
 
                 </div>
             </div>
