@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project is available at ([https://cloudn0tes.netlify.app/login](https://cloudn0tes.netlify.app)).
+This project is available at ([https://cloudn0tes.netlify.app](https://cloudn0tes.netlify.app)).
 
 ## Available Scripts
 
