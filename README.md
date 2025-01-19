@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Cloud Notes
 
 This project is available at ([https://cloudn0tes.netlify.app](https://cloudn0tes.netlify.app)).
 
